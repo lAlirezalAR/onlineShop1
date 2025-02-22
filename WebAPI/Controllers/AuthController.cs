@@ -1,6 +1,11 @@
-﻿using Application.AuthService;
+﻿using Application.Users.Commands;
+using Application.Users.Queries;
+using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WebAPI.Controllers
 {
@@ -8,25 +13,25 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
+        private readonly IMediator mediator;
+
+        public AuthController(IMediator mediator)
         {
-            _authService = authService;
+            this.mediator = mediator;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto model)
+        public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
         {
-            var result = await _authService.RegisterAsync(model);
-            return Ok(new { message = result });
+            var userId = await mediator.Send(command);
+            return Ok(new { UserId = userId });
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto model)
+        public async Task<IActionResult> Login([FromBody] LoginUserQuery query)
         {
-            var result = await _authService.LoginAsync(model);
-            return Ok(new { token = result });
+            var token = await mediator.Send(query);
+            return Ok(new { token = token });
         }
-
     }
 }

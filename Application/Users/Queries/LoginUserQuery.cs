@@ -1,12 +1,13 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.AuthService
+namespace Application.Users.Queries
 {
-    public class LoginDto
+    public class LoginUserQuery: IRequest<string>
     {
         public string Email { get; set; }
         public string Password { get; set; }

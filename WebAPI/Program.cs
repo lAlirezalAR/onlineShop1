@@ -1,6 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 using Infrastructure.IdentityConfigs;
+using Application.Users.Commands;
+using Application.Users.Queries;
+using MediatR;
+using Infrastructure.Services;
+using Application.AuthServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,15 +19,9 @@ string connection = builder.Configuration.GetConnectionString("SqlServer");
 builder.Services.AddDbContext<DatabaseContext>(option => option.UseSqlServer(connection));
 builder.Services.AddIdentityService(builder.Configuration);
 
-builder.Services.ConfigureApplicationCookie(option =>
-{
-    option.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-    option.LoginPath = "Account/login";
-    option.AccessDeniedPath = "Account/AccessDenied";
-    option.SlidingExpiration = true;
-});
 #endregion
-
+builder.Services.AddMediatR(typeof(RegisterUserCommand).Assembly);
+builder.Services.AddScoped<IAuthService, AuthService>(); 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
