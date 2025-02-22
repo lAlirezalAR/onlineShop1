@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 
 namespace Persistence.Contexts
 {
-    public class DataBaseContext:DbContext,IDataBaseContext
+    public class DatabaseContext:DbContext,IDatabaseContext
     {
-        public DataBaseContext(DbContextOptions options): base(options) { }
-        public DbSet<User> Users { get; set; }
+        public DatabaseContext(DbContextOptions<DatabaseContext> options): base(options) { }
     }
 }

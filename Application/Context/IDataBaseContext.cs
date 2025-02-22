@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace Application.Context
 {
-    public interface IDataBaseContext
+    public interface IDatabaseContext
     {
-        DbSet<User> Users { get; set; }
         int SaveChanges();
     }
 }
