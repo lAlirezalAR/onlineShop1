@@ -13,9 +13,9 @@ namespace Application.Users.Queries
     public class LoginUserQueryHandler:IRequestHandler<LoginUserQuery, string>
     {
         private readonly UserManager<User> userManager;
-        private readonly AuthService authService;
+        private readonly IAuthService authService;
 
-        public LoginUserQueryHandler(UserManager<User> userManager,AuthService authService)
+        public LoginUserQueryHandler(UserManager<User> userManager,IAuthService authService)
         {
             this.userManager = userManager;
             this.authService = authService;
@@ -28,7 +28,7 @@ namespace Application.Users.Queries
             {
                 throw new Exception("نام کاربری یا رمز عبور اشتباه هست");
             }
-            return await authService.GenerateJwtToken(user);
+            return await authService.LoginAsync(request.Email, request.Password);
         }
     }
 }
